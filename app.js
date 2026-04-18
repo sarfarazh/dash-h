@@ -873,8 +873,7 @@
       }
     });
     document.getElementById("export-btn").addEventListener("click", async () => {
-      const includeKey = document.getElementById("export-include-key").checked;
-      const data = await PulseDB.exportAll({ includeApiKey: includeKey });
+      const data = await PulseDB.exportAll();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -898,7 +897,7 @@
       try {
         const text = await file.text();
         const data = JSON.parse(text);
-        await PulseDB.importAll(data, { includeChats: true, overwriteApiKey: Boolean(data.settings && data.settings.apiKey) });
+        await PulseDB.importAll(data, { includeChats: true });
         const out = document.getElementById("export-result");
         out.hidden = false;
         out.className = "test-pill ok";

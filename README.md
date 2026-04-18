@@ -10,7 +10,7 @@ A fully offline-capable mobile Progressive Web App for personal health tracking,
 - **STATS** — 7- or 30-day SVG mini-charts for every metric: heart avg BPM, sleep score, hydration (with goal line), steps (with goal line), kcal net, recovery percent.
 - **LOG** — full-screen hub with a metric picker and entry form for every metric, plus a recent-entries list with swipe-to-delete. A floating **+** FAB opens the same forms from any screen in a bottom sheet.
 - **PROFILE** — streak counter, all-time entry count, display name, editable daily goals (hydration / steps / calories), and today-at-a-glance summary.
-- **SETTINGS** — OpenRouter API key + model picker, JSON export/import (with optional API-key inclusion), clear-all-data, and about.
+- **SETTINGS** — OpenRouter API key + model picker, JSON export/import (API key never included in backups), clear-all-data, and about.
 
 ### Log any metric
 
@@ -37,7 +37,7 @@ A fully offline-capable mobile Progressive Web App for personal health tracking,
 - Service worker pre-caches every static asset (`index.html`, `styles.css`, `app.js`, `db.js`, `ai.js`, icons, manifest).
 - IndexedDB stores all entries, settings, and chat history locally.
 - OpenRouter requests are excluded from the cache and fail gracefully when offline (chat disables, tip card falls back to the last cached tip).
-- JSON backup / restore with optional API-key inclusion.
+- JSON backup / restore; API key stays on-device only and is never written to backup files.
 
 ### Design
 

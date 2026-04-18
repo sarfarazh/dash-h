@@ -240,13 +240,12 @@
   }
 
   /* ---------- Export / Import ---------- */
-  async function exportAll(options) {
-    const opts = options || {};
+  async function exportAll() {
     const entries = await getAllEntries();
     const allSettings = await getAllSettings();
     const chats = await getChatMessages();
     const settings = Object.assign({}, allSettings);
-    if (!opts.includeApiKey) delete settings.apiKey;
+    delete settings.apiKey;
     return {
       app: "pulsedesk",
       version: 1,
@@ -276,7 +275,7 @@
     if (data.settings && typeof data.settings === "object") {
       const store = await tx(STORES.settings, "readwrite");
       for (const [k, v] of Object.entries(data.settings)) {
-        if (k === "apiKey" && !opts.overwriteApiKey) continue;
+        if (k === "apiKey") continue;
         await promisify(store.put({ key: k, value: v }));
       }
     }
