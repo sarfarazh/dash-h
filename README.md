@@ -1,83 +1,112 @@
 # Pulse Desk — Offline Health Dashboard PWA
 
-A fully offline-capable mobile Progressive Web App for personal health tracking. Built with vanilla HTML, CSS, and JavaScript — zero build step, zero dependencies. Ships as a static site ready to drop onto Netlify.
+A fully offline-capable mobile Progressive Web App for personal health tracking, with an optional AI health coach. Built with vanilla HTML, CSS, and JavaScript — zero build step, zero dependencies. Deploys to Netlify as a static site.
 
 ## Features
 
-- **Bento grid dashboard** with seven widgets:
-  - HEART RATE — animated SVG trend graph + live BPM ticker
-  - SLEEP SCORE — numeric score, moon icon, stage bars
-  - ENERGY — calories intake vs burn with net delta
-  - HYDRATION — tap-to-add bottle tracker with animated wave fill (persisted)
-  - RECOVERY — body battery meter with dynamic color ramp
-  - ACTIVITY RINGS — three concentric progress rings (Move / Exercise / Stand)
-  - STEP COUNTER — count, goal progress, and quick actions (persisted)
-- **Soft Neo-Brutalism** — deep charcoal (`#141414`) background, 2.5px borders, hard offset shadows, pastel accents (salmon, periwinkle, yellow, mint)
-- **Bold all-caps typography** with modular fintech SaaS aesthetic
-- **Fully offline** — service worker pre-caches every asset on first visit
-- **Installable** — Web App Manifest with maskable icons, standalone display mode
-- **Persistent state** — hydration and steps survive reloads via `localStorage`
-- **Mobile-first** — safe-area-aware padding, bottom tab bar, responsive bento grid
-- **Accessible** — semantic landmarks, ARIA roles/labels, reduced-motion support
+### Five fully functional screens
+
+- **HOME** — Bento dashboard with seven live widgets (heart rate, sleep score, energy, hydration, recovery battery, activity rings, step counter). All widgets read today's entries from IndexedDB.
+- **STATS** — 7- or 30-day SVG mini-charts for every metric: heart avg BPM, sleep score, hydration (with goal line), steps (with goal line), kcal net, recovery percent.
+- **LOG** — full-screen hub with a metric picker and entry form for every metric, plus a recent-entries list with swipe-to-delete. A floating **+** FAB opens the same forms from any screen in a bottom sheet.
+- **PROFILE** — streak counter, all-time entry count, display name, editable daily goals (hydration / steps / calories), and today-at-a-glance summary.
+- **SETTINGS** — OpenRouter API key + model picker, JSON export/import (with optional API-key inclusion), clear-all-data, and about.
+
+### Log any metric
+
+- HEART RATE · BPM + rest/active context
+- SLEEP · score, duration, optional stage minutes (deep/rem/light/awake)
+- FOOD · name + kcal
+- BURN · activity + kcal
+- HYDRATION · quick 250 / 500 / 750 ml tiles or custom
+- RECOVERY · body-battery %, optional HRV
+- ACTIVITY RINGS · three sliders for move / exercise / stand
+- STEPS · quick tiles or custom count
+
+### Optional AI Health Coach (OpenRouter)
+
+- Entirely optional — the app is fully functional without a key.
+- Settings links to [openrouter.ai/workspaces/default/keys](https://openrouter.ai/workspaces/default/keys) to grab a key.
+- Choose from **Gemini 3 Flash Preview** (recommended), **Grok 4.1 Fast** (cheapest), or **Gemini 2.5 Flash** (popular).
+- When a key is saved, a Daily Tip card appears at the top of Home.
+- Tap the card to open a streaming chat with the coach (persistent history in IndexedDB).
+- System prompt is auto-populated with today's goals and metrics so the coach gives grounded advice.
+
+### Offline-first
+
+- Service worker pre-caches every static asset (`index.html`, `styles.css`, `app.js`, `db.js`, `ai.js`, icons, manifest).
+- IndexedDB stores all entries, settings, and chat history locally.
+- OpenRouter requests are excluded from the cache and fail gracefully when offline (chat disables, tip card falls back to the last cached tip).
+- JSON backup / restore with optional API-key inclusion.
+
+### Design
+
+- Soft Neo-Brutalism: deep charcoal (`#141414`) background, 2.5px borders, hard offset shadows, 20px radius.
+- Pastel accents: salmon, periwinkle, yellow, mint.
+- Bold all-caps sans-serif typography with modular fintech SaaS aesthetic.
+- Mobile-first layout, safe-area aware, bottom tab bar + center FAB.
 
 ## Project Structure
 
 ```
 .
-├── index.html              # Markup for all widgets + PWA meta tags
-├── styles.css              # Neo-brutalist dark theme + bento grid
-├── app.js                  # Widget logic, SVG charts, SW registration
+├── index.html              # 5 screens + sheet + chat
+├── styles.css              # Neo-brutalist theme + all component styles
+├── app.js                  # Router, forms, widgets, stats, profile, settings, coach
+├── db.js                   # IndexedDB wrapper (entries, settings, chats)
+├── ai.js                   # OpenRouter client (tip + streaming chat)
 ├── sw.js                   # Cache-first service worker
 ├── manifest.webmanifest    # PWA manifest
-├── icons/
-│   ├── favicon.svg
-│   ├── icon-192.svg
-│   └── icon-512.svg
-├── netlify.toml            # Netlify headers (SW scope, manifest MIME)
+├── icons/                  # SVG app icons
+├── netlify.toml            # Headers for SW scope and manifest MIME
 └── README.md
 ```
 
 ## Run Locally
 
-A service worker requires a real HTTP origin (`file://` won't work). Any static server is fine:
+Service workers need a real HTTP origin (`file://` won't work). Any static server works:
 
 ```bash
-# Python 3
 python -m http.server 8080
-
-# or Node
+# or
 npx serve .
 ```
 
-Then open `http://localhost:8080`.
+Open `http://localhost:8080` and try "Add to Home Screen" on mobile.
 
 ## Deploy to Netlify
 
-### Option A — drag and drop
-1. Zip the project folder (or drag the folder itself).
-2. Go to [app.netlify.com/drop](https://app.netlify.com/drop).
-3. Drop it. Done.
+### Drag and drop
+1. Go to [app.netlify.com/drop](https://app.netlify.com/drop).
+2. Drag the project folder onto the page.
 
-### Option B — Netlify CLI
+### Netlify CLI
 ```bash
 npm install -g netlify-cli
 netlify deploy --prod --dir=.
 ```
 
-### Option C — Git-based deploy
-1. Push this folder to a new GitHub repo.
-2. In Netlify, click **Add new site → Import an existing project**.
-3. Select the repo. Leave build command empty; set publish directory to `.`.
-4. Deploy.
+### Git-based
+1. Push to a GitHub repo.
+2. In Netlify, **Add new site → Import an existing project**, pick the repo, leave build command empty, publish directory `.`.
 
-After deploying, open the site on your phone, tap the browser's "Add to Home Screen" option, and launch it like a native app. It will work fully offline from the second visit onward.
+## Using the AI Coach
+
+1. Visit [openrouter.ai/workspaces/default/keys](https://openrouter.ai/workspaces/default/keys) and create a key.
+2. In the app, open **Settings**, paste the key, pick a model, and hit **SAVE**.
+3. Tap **TEST CONNECTION** to verify.
+4. A **Daily Tip** card appears on Home — tap it to chat.
+
+The key never leaves your device except in API calls directly to OpenRouter.
 
 ## Customization
 
-- Colors and radii live as CSS variables at the top of [styles.css](styles.css).
-- Goals (`HYDRATION_GOAL`, `STEPS_GOAL`) and mock data generators are at the top of [app.js](app.js).
-- Bump the `CACHE_NAME` in [sw.js](sw.js) whenever you change assets to force clients to update.
+- Colors / radii: CSS variables at the top of [styles.css](styles.css).
+- Default goals and metrics: `DEFAULTS` in [db.js](db.js).
+- Model list and pricing: `MODELS` in [ai.js](ai.js).
+- System prompt: `buildSystemPrompt` in [ai.js](ai.js).
+- Bump `CACHE_NAME` in [sw.js](sw.js) when you ship asset changes.
 
 ## License
 
-MIT — do whatever you want.
+MIT.

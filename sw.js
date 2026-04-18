@@ -1,10 +1,12 @@
-/* Pulse Desk — service worker (cache-first offline) */
-const CACHE_NAME = "pulsedesk-v1";
+/* Pulse Desk — service worker (cache-first offline, network-only for OpenRouter) */
+const CACHE_NAME = "pulsedesk-v2";
 const PRECACHE = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./db.js",
+  "./ai.js",
   "./manifest.webmanifest",
   "./icons/favicon.svg",
   "./icons/icon-192.svg",
@@ -38,6 +40,11 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
 
   const url = new URL(req.url);
+
+  // Never cache OpenRouter (AI requests must always hit the network)
+  if (url.host.endsWith("openrouter.ai")) return;
+
+  // Only handle our own origin
   if (url.origin !== self.location.origin) return;
 
   if (req.mode === "navigate") {

@@ -1,4 +1,5 @@
 [build]
+  command = "node scripts/inject-og.cjs"
   publish = "."
 
 [[headers]]
@@ -23,3 +24,9 @@
   for = "/icons/*"
   [headers.values]
     Cache-Control = "public, max-age=604800, immutable"
+
+[[headers]]
+  for = "/og-image.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, immutable"
+    Content-Type = "image/png"
