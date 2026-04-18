@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#141414" />
+  <meta name="description" content="Personal health dashboard — offline PWA" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+  <title>PULSE DESK — Health</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="header neo-card">
+      <div class="header__text">
+        <p class="header__eyebrow">HEALTH OS</p>
+        <h1 class="header__title" id="greeting">HELLO, TRACKER</h1>
+        <p class="header__date" id="today-date" aria-live="polite"></p>
+      </div>
+      <div class="header__badge neo-inset" aria-hidden="true">
+        <span class="header__badge-dot"></span>
+      </div>
+    </header>
+
+    <main class="bento" aria-label="Health dashboard widgets">
+      <!-- Heart rate — full width -->
+      <section class="widget widget--heart neo-card" aria-labelledby="heart-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="heart-title">HEART RATE</h2>
+          <div class="widget__tag widget__tag--salmon">24H AVG</div>
+        </div>
+        <div class="heart__main">
+          <div class="heart__bpm">
+            <span class="heart__value" id="heart-bpm">72</span>
+            <span class="heart__unit">BPM</span>
+          </div>
+          <div class="heart__graph-wrap">
+            <svg class="heart__svg" id="heart-chart" viewBox="0 0 320 100" preserveAspectRatio="none" role="img" aria-label="Heart rate over 24 hours">
+              <defs>
+                <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#FF8A7A" />
+                  <stop offset="100%" stop-color="#FFB4A8" />
+                </linearGradient>
+              </defs>
+              <path id="heart-path" class="heart__path" fill="none" stroke="url(#heartGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+              <circle id="heart-dot" class="heart__dot" r="6" fill="#FF8A7A" stroke="#141414" stroke-width="2" />
+            </svg>
+          </div>
+        </div>
+        <p class="widget__foot" id="heart-foot">RESTING RANGE · 58–75 BPM</p>
+      </section>
+
+      <!-- Sleep + Calories row -->
+      <section class="widget widget--sleep neo-card" aria-labelledby="sleep-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="sleep-title">SLEEP SCORE</h2>
+          <div class="moon" aria-hidden="true" title="Night">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M34 8.5C34 8.5 24 4 14 14C4 24 8.5 34 8.5 34C10 30 14 26 22 26C30 26 36 20 36 12C36 10 35 8.5 34 8.5Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="22" cy="16" r="2" fill="currentColor" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
+        <p class="sleep__score accent-periwinkle" id="sleep-score">87</p>
+        <p class="sleep__label">OUT OF 100</p>
+        <div class="sleep__stages" id="sleep-stages" role="list" aria-label="Sleep stages"></div>
+        <p class="widget__foot" id="sleep-foot">7 H 42 M · DEEP 22%</p>
+      </section>
+
+      <section class="widget widget--cal neo-card" aria-labelledby="cal-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="cal-title">ENERGY</h2>
+          <div class="widget__tag widget__tag--yellow">TODAY</div>
+        </div>
+        <div class="cal__bars">
+          <div class="cal__row">
+            <span class="cal__name">INTAKE</span>
+            <div class="cal__track"><div class="cal__fill cal__fill--yellow" id="cal-intake-bar" style="width: 0%"></div></div>
+            <span class="cal__num" id="cal-intake-val">0</span>
+          </div>
+          <div class="cal__row">
+            <span class="cal__name">BURN</span>
+            <div class="cal__track"><div class="cal__fill cal__fill--salmon" id="cal-burn-bar" style="width: 0%"></div></div>
+            <span class="cal__num" id="cal-burn-val">0</span>
+          </div>
+        </div>
+        <p class="cal__delta" id="cal-delta">NET · 0 KCAL</p>
+      </section>
+
+      <!-- Hydration + Recovery -->
+      <section class="widget widget--hydro neo-card" aria-labelledby="hydro-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="hydro-title">HYDRATION</h2>
+          <button type="button" class="btn-neo" id="hydro-add" aria-label="Add 250 milliliters">+250 ML</button>
+        </div>
+        <div class="hydro__bottle">
+          <svg class="hydro__svg" viewBox="0 0 120 200" aria-hidden="true">
+            <defs>
+              <clipPath id="hydro-clip">
+                <rect x="10" y="20" width="100" height="170" rx="16" />
+              </clipPath>
+              <linearGradient id="hydroWave" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#A9B6FF" />
+                <stop offset="100%" stop-color="#7A8FE6" />
+              </linearGradient>
+            </defs>
+            <rect x="10" y="20" width="100" height="170" rx="16" fill="none" stroke="#2a2a2a" stroke-width="3" />
+            <g clip-path="url(#hydro-clip)">
+              <rect x="0" y="200" width="120" height="200" fill="url(#hydroWave)" class="hydro__fill" id="hydro-fill" transform="translate(0,0)" />
+              <path id="hydro-wave" class="hydro__wave" fill="rgba(169,182,255,0.35)" d="" />
+            </g>
+          </svg>
+          <div class="hydro__readout">
+            <span class="hydro__ml accent-periwinkle" id="hydro-ml">0</span>
+            <span class="hydro__goal" id="hydro-goal-text">/ 2500 ML</span>
+          </div>
+        </div>
+        <p class="widget__foot" id="hydro-pct">0% OF DAILY GOAL</p>
+      </section>
+
+      <section class="widget widget--recovery neo-card" aria-labelledby="recovery-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="recovery-title">RECOVERY</h2>
+          <div class="widget__tag widget__tag--mint">BODY BATTERY</div>
+        </div>
+        <div class="battery" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="82" id="recovery-meter">
+          <div class="battery__shell neo-inset">
+            <div class="battery__nipple"></div>
+            <div class="battery__inner">
+              <div class="battery__level" id="recovery-level" style="width: 82%"></div>
+            </div>
+          </div>
+          <span class="battery__pct accent-yellow" id="recovery-pct">82%</span>
+        </div>
+        <p class="widget__foot" id="recovery-foot">HRV TREND · STABLE</p>
+      </section>
+
+      <!-- Rings + Steps -->
+      <section class="widget widget--rings neo-card" aria-labelledby="rings-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="rings-title">ACTIVITY RINGS</h2>
+        </div>
+        <div class="rings-wrap">
+          <svg class="rings-svg" viewBox="0 0 200 200" role="img" aria-label="Move, exercise, and stand progress">
+            <defs>
+              <filter id="ringShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="0" flood-color="#000" flood-opacity="0.4"/>
+              </filter>
+            </defs>
+            <!-- Move -->
+            <circle class="rings-bg" cx="100" cy="100" r="78" fill="none" stroke="#2a2a2a" stroke-width="14" />
+            <circle id="ring-move" class="rings-arc" cx="100" cy="100" r="78" fill="none" stroke="#FF8A7A" stroke-width="14" stroke-linecap="round" transform="rotate(-90 100 100)" />
+            <!-- Exercise -->
+            <circle class="rings-bg" cx="100" cy="100" r="58" fill="none" stroke="#2a2a2a" stroke-width="14" />
+            <circle id="ring-ex" class="rings-arc" cx="100" cy="100" r="58" fill="none" stroke="#A9B6FF" stroke-width="14" stroke-linecap="round" transform="rotate(-90 100 100)" />
+            <!-- Stand -->
+            <circle class="rings-bg" cx="100" cy="100" r="38" fill="none" stroke="#2a2a2a" stroke-width="12" />
+            <circle id="ring-stand" class="rings-arc" cx="100" cy="100" r="38" fill="none" stroke="#FFE35C" stroke-width="12" stroke-linecap="round" transform="rotate(-90 100 100)" />
+          </svg>
+          <ul class="rings-legend">
+            <li><span class="dot dot--salmon"></span> MOVE <strong id="ring-move-pct">0%</strong></li>
+            <li><span class="dot dot--peri"></span> EXERCISE <strong id="ring-ex-pct">0%</strong></li>
+            <li><span class="dot dot--yellow"></span> STAND <strong id="ring-stand-pct">0%</strong></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="widget widget--steps neo-card" aria-labelledby="steps-title">
+        <div class="widget__top">
+          <h2 class="widget__title" id="steps-title">STEP COUNTER</h2>
+          <div class="steps__icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 26C10 23 12 20 14 18C16 16 16 12 14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 8C22 10 20 12 18 14C16 16 16 18 18 20C20 22 22 24 22 26" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <ellipse cx="16" cy="6" rx="3" ry="2" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+        <p class="steps__count accent-salmon" id="steps-count">0</p>
+        <p class="steps__sub" id="steps-goal-label">GOAL · 10,000</p>
+        <div class="steps__bar neo-inset">
+          <div class="steps__fill" id="steps-fill" style="width: 0%"></div>
+        </div>
+        <div class="steps__actions">
+          <button type="button" class="btn-neo btn-neo--sm" id="steps-sync" aria-label="Simulate sync">SYNC</button>
+          <button type="button" class="btn-neo btn-neo--sm" id="steps-add" aria-label="Add 500 steps">+500</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar neo-card" aria-label="Primary">
+      <a href="#" class="tab tab--active" aria-current="page">HOME</a>
+      <a href="#" class="tab">STATS</a>
+      <a href="#" class="tab">LOG</a>
+      <a href="#" class="tab">PROFILE</a>
+    </nav>
+  </div>
+
+  <noscript>
+    <p style="padding:1rem;background:#1e1e1e;color:#fff;text-align:center;font-family:system-ui">ENABLE JAVASCRIPT FOR INTERACTIVE WIDGETS & OFFLINE MODE.</p>
+  </noscript>
+  <script src="app.js" defer></script>
+</body>
+</html>
