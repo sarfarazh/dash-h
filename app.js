@@ -933,7 +933,14 @@
       btn.className = "model-opt";
       btn.setAttribute("role", "radio");
       btn.setAttribute("aria-checked", m.id === s.model ? "true" : "false");
-      const noteClass = m.note === "CHEAPEST" ? "model-opt__note--cheapest" : m.note === "POPULAR" ? "model-opt__note--popular" : "";
+      const noteClass =
+        m.note === "CHEAPEST"
+          ? "model-opt__note--cheapest"
+          : m.note === "POPULAR"
+            ? "model-opt__note--popular"
+            : m.note === "FREE"
+              ? "model-opt__note--free"
+              : "";
       btn.innerHTML = `
         <div class="model-opt__name">${m.label} <span class="model-opt__note ${noteClass}">${m.note}</span></div>
         <div class="model-opt__price">${m.price}</div>

@@ -599,6 +599,7 @@ input[type=range]::-moz-range-thumb {
 }
 .model-opt__note--cheapest { background: var(--mint); }
 .model-opt__note--popular { background: var(--peri); }
+.model-opt__note--free { background: var(--mint); color: #1a1a1a; }
 .model-opt__price { font-size: 0.55rem; color: var(--muted); letter-spacing: 0.1em; margin-top: 6px; }
 
 .test-pill {

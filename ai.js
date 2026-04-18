@@ -24,6 +24,18 @@
       price: "$0.30/M IN · $2.50/M OUT",
       note: "POPULAR",
     },
+    {
+      id: "google/gemma-4-31b-it:free",
+      label: "GEMMA 4 31B IT",
+      price: "$0 · FREE TIER",
+      note: "FREE",
+    },
+    {
+      id: "nvidia/nemotron-3-super-120b-a12b:free",
+      label: "NEMOTRON 3 SUPER",
+      price: "$0 · FREE TIER",
+      note: "FREE",
+    },
   ];
 
   async function isConfigured() {
