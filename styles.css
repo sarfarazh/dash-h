@@ -39,6 +39,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Author `display` rules must not override the HTML `hidden` attribute */
+[hidden] {
+  display: none !important;
+}
+
 .accent-salmon { color: var(--salmon); }
 .accent-periwinkle { color: var(--peri); }
 .accent-yellow { color: var(--yellow); }

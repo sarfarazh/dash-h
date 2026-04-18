@@ -22,7 +22,7 @@
   <meta name="twitter:description" content="Offline-first health PWA with logging, stats, and optional AI coach." />
   <meta name="twitter:image" content="/og-image.png" />
   <meta name="twitter:image:alt" content="Pulse Desk — health dashboard preview" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
@@ -288,7 +288,7 @@
       </div>
 
       <section class="neo-card settings-block">
-        <h2 class="widget__title">DISPLAY NAME</h2>
+        <label class="field-label" for="display-name">DISPLAY NAME</label>
         <div class="form-row">
           <input type="text" class="input-neo" id="display-name" placeholder="TRACKER" autocomplete="off" maxlength="20" />
           <button type="button" class="btn-neo" id="save-name">SAVE</button>
@@ -346,22 +346,24 @@
           <a class="btn-neo btn-neo--peri" href="https://openrouter.ai/workspaces/default/keys" target="_blank" rel="noopener">GET KEY</a>
         </div>
 
-        <label class="field-label" for="ai-key">OPENROUTER API KEY</label>
-        <div class="form-row">
-          <input type="password" class="input-neo" id="ai-key" placeholder="sk-or-..." autocomplete="off" spellcheck="false" />
-          <button type="button" class="btn-neo btn-neo--sm" id="toggle-key" aria-label="Show or hide key">SHOW</button>
-        </div>
-        <p class="settings-hint">STORED LOCALLY ON THIS DEVICE ONLY.</p>
+        <form id="settings-ai-form" autocomplete="off" onsubmit="return false">
+          <label class="field-label" for="ai-key">OPENROUTER API KEY</label>
+          <div class="form-row">
+            <input type="password" class="input-neo" id="ai-key" placeholder="sk-or-..." autocomplete="off" spellcheck="false" />
+            <button type="button" class="btn-neo btn-neo--sm" id="toggle-key" aria-label="Show or hide key">SHOW</button>
+          </div>
+          <p class="settings-hint">STORED LOCALLY ON THIS DEVICE ONLY.</p>
 
-        <label class="field-label">MODEL</label>
-        <div class="model-picker" id="model-picker" role="radiogroup" aria-label="Model"></div>
+          <label class="field-label">MODEL</label>
+          <div class="model-picker" id="model-picker" role="radiogroup" aria-label="Model"></div>
 
-        <div class="form-row form-row--end">
-          <button type="button" class="btn-neo" id="save-key">SAVE</button>
-          <button type="button" class="btn-neo btn-neo--ghost" id="clear-key">CLEAR KEY</button>
-          <button type="button" class="btn-neo btn-neo--yellow" id="test-key">TEST CONNECTION</button>
-        </div>
-        <p class="test-pill" id="test-result" hidden></p>
+          <div class="form-row form-row--end">
+            <button type="button" class="btn-neo" id="save-key">SAVE</button>
+            <button type="button" class="btn-neo btn-neo--ghost" id="clear-key">CLEAR KEY</button>
+            <button type="button" class="btn-neo btn-neo--yellow" id="test-key">TEST CONNECTION</button>
+          </div>
+          <p class="test-pill" id="test-result" hidden></p>
+        </form>
       </section>
 
       <section class="neo-card settings-block">
@@ -376,7 +378,7 @@
         <div class="form-row form-row--end">
           <button type="button" class="btn-neo btn-neo--peri" id="export-btn">EXPORT JSON</button>
           <button type="button" class="btn-neo" id="import-btn">IMPORT JSON</button>
-          <input type="file" accept="application/json,.json" id="import-file" hidden />
+          <input type="file" accept="application/json,.json" id="import-file" hidden aria-label="Import JSON backup file" />
         </div>
         <p class="test-pill" id="export-result" hidden></p>
       </section>
